@@ -9,13 +9,13 @@
         <FRMtype Value="0"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="66"/>
+        <TopLine Value="61"/>
         <CursorPos X="3" Y="70"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="6">
+    <JumpHistory HistoryIndex="5">
       <Position>
         <Filename Value="demo02.ppr"/>
         <Caret Column="15"/>
@@ -27,10 +27,6 @@
       <Position>
         <Filename Value="demo02.ppr"/>
         <Caret Line="40" Column="5" TopLine="21"/>
-      </Position>
-      <Position>
-        <Filename Value="demo02.ppr"/>
-        <Caret Line="41" Column="13" TopLine="45"/>
       </Position>
       <Position>
         <Filename Value="demo02.ppr"/>

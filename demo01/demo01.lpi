@@ -25,8 +25,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="demo01.ppr"/>
-        <FRMtype Value="0"/>
+        <Filename Value="demo01.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
