@@ -8,12 +8,57 @@
         <Filename Value="demo01.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="34" Y="4"/>
-        <UsageCount Value="21"/>
+        <TopLine Value="16"/>
+        <CursorPos X="28" Y="22"/>
+        <UsageCount Value="23"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="../SDL2-for-Pascal/sdl2.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="172"/>
+        <CursorPos X="11" Y="178"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../SDL2-for-Pascal/sdltype.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="55"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../SDL2-for-Pascal/sdlversion.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="97"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../SDL2-for-Pascal/sdlerror.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="39"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../SDL2-for-Pascal/sdlplatform.inc"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory HistoryIndex="2">
+      <Position>
+        <Filename Value="demo01.lpr"/>
+        <Caret Line="4" Column="34"/>
+      </Position>
+      <Position>
+        <Filename Value="../SDL2-for-Pascal/sdl2.pas"/>
+        <Caret Line="177" Column="11" TopLine="172"/>
+      </Position>
+      <Position>
+        <Filename Value="../SDL2-for-Pascal/sdl2.pas"/>
+        <Caret Line="178" Column="11" TopLine="172"/>
+      </Position>
+    </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>

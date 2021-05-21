@@ -19,6 +19,7 @@ begin
   //ініціалізація бібліотеки SDL 2.0
   if SDL_Init(SDL_INIT_EVERYTHING)>=0 then begin
     //успішна ініціалізація - створюємо вікно
+    WriteLn(SDL_GetPlatform);
     SDLWindow:=SDL_CreateWindow('demo01',
                                SDL_WINDOWPOS_UNDEFINED,
                                SDL_WINDOWPOS_UNDEFINED,

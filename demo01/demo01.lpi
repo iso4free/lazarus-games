@@ -26,7 +26,6 @@
     <Units>
       <Unit>
         <Filename Value="demo01.lpr"/>
-        <FRMtype Value="0"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
@@ -34,7 +33,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="../bin/$(TargetCPU)-$(TargetOS)/demo01"/>
+      <Filename Value="../bin/$(TargetCPU)-$(TargetOS)-demo01"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
