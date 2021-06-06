@@ -9,7 +9,7 @@
         <MainUnitHasScaledStatement Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="demo03"/>
+      <Title Value="demo04"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -18,8 +18,6 @@
     </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
-      <DestinationDirectory Value="/home/vadim/development/pascal/lazarus-games/demo04"/>
-      <CompressFinally Value="False"/>
       <UseFileFilters Value="True"/>
     </PublishOptions>
     <RunParams>
@@ -27,11 +25,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="demo03.lpr"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="ugoengine.pas"/>
+        <Filename Value="demo04.ppr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
@@ -39,7 +33,7 @@
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="../bin/demo03"/>
+      <Filename Value="../bin/$(TargetCPU)-$(TargetOS)-demo04"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
