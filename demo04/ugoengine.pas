@@ -39,9 +39,9 @@ type
 
    property Error : Boolean read FError;//ознака збою в роботі класа
    property ErrorInfo : String read FErrorInfo; //текстовий опис помилки
-   property Caption : String read FCaption write SetCaption;
-   property Width : Integer read FWidth write SetWidth default 640;
-   property Height : Integer read FHeight write SetHeight default 480;
+   property Caption : String read FCaption write SetCaption;//заголовок вікна
+   property Width : Integer read FWidth write SetWidth default 640; //ширина вікна
+   property Height : Integer read FHeight write SetHeight default 480; //висота вікна
   end;
 
 var
