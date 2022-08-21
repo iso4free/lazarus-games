@@ -16,7 +16,7 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="63"/>
-        <CursorPos Y="75"/>
+        <CursorPos X="41" Y="92"/>
         <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
@@ -87,6 +87,10 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="97" Column="98" TopLine="81"/>
+      </Position>
       <Position>
         <Filename Value="ugoengine.pas"/>
         <Caret Line="257" Column="27" TopLine="232"/>
@@ -203,14 +207,21 @@
         <Filename Value="ugoengine.pas"/>
         <Caret Line="88" TopLine="63"/>
       </Position>
-      <Position>
-        <Filename Value="ugoengine.pas"/>
-        <Caret Line="92" Column="41" TopLine="63"/>
-      </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>
     </RunParams>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="ugoengine.pas"/>
+        <Line Value="75"/>
+      </Item>
+    </BreakPoints>
+  </Debugging>
 </CONFIG>

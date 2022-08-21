@@ -88,8 +88,8 @@ var CountInstances : Byte;
       FWindow:=SDL_CreateWindow('',
                                  SDL_WINDOWPOS_UNDEFINED,
                                  SDL_WINDOWPOS_UNDEFINED,
-                                 FWidth,
-                                 FHeight,
+                                 0,
+                                 0,
                                  FWindowFlags);
       //якщо вікно створене, створюємо візуалізатор
       if FWindow<>nil then begin
