@@ -18,10 +18,10 @@ type
     FTextureMap : TGoTextureMap;
     constructor Create;
    public
-    function Load(aFileName : String; aID : String; aRenderer : PSDL_Renderer) : Boolean;
-    procedure Draw(aID : String; x,y,w,h : Integer; aRenderer : PSDL_Renderer; Flip : Integer = SDL_FLIP_NONE);
-    procedure DrawFrame(aID : String; x,y,w,h : Integer; CurrentRow, CurrentFrame : Integer; aRenderer : PSDL_Renderer; Flip : Integer = SDL_FLIP_NONE);
-    destructor Destroy;
+    function Load(aFileName : String; aID : String) : Boolean;
+    procedure Draw(aID : String; x,y,w,h : Integer; Flip : Integer = SDL_FLIP_NONE);
+    procedure DrawFrame(aID : String; x,y,w,h : Integer; CurrentRow, CurrentFrame : Integer; Flip : Integer = SDL_FLIP_NONE);
+    destructor Destroy; override;
   end;
 
 
@@ -47,6 +47,8 @@ type
     Fhardwareacceleration: Boolean;
     FFileName : TFileName; // ім'я файлу налаштувань
     FSection : String; //назва секції налаштувань фреймворка
+
+    fr,fc : Integer;
 
     constructor Create(Afile: Tfilename = 'goengine.ini'; Asection: String = 'ENGINE');
     procedure SetCaption(AValue: String);
@@ -96,11 +98,11 @@ var CountInstances : Byte;
 
     constructor TGoTextureManager.Create;
     begin
-
+      inherited Create;
+      FTextureMap:=TGoTextureMap.Create;
     end;
 
-    function TGoTextureManager.Load(aFileName: String; aID: String;
-    aRenderer: PSDL_Renderer): Boolean;
+        function TGoTextureManager.Load(aFileName: String; aID: String): Boolean;
     var TmpSurface : PSDL_Surface;
         TmpTexture : PSDL_Texture;
   begin
@@ -110,7 +112,7 @@ var CountInstances : Byte;
       WriteLN( SDL_GetError(),' Error loading '+aFileName);
       Exit;
      end;
-     TmpTexture:=SDL_CreateTextureFromSurface(aRenderer,TmpSurface);
+     TmpTexture:=SDL_CreateTextureFromSurface(GoEngine.FRenderer,TmpSurface);
      SDL_FreeSurface(TmpSurface);
      if TmpTexture<>nil then begin
       FTextureMap[aID]:=TmpTexture;
@@ -118,16 +120,40 @@ var CountInstances : Byte;
      end;
   end;
 
-    procedure TGoTextureManager.Draw(aID: String; x, y, w, h: Integer;
-    aRenderer: PSDL_Renderer; Flip: Integer);
+        procedure TGoTextureManager.Draw(aID: String; x, y, w, h: Integer;
+      Flip: Integer);
+    var srcRect, dstRect : TSDL_Rect;
+        p : TSDL_Point;
   begin
-
+     srcRect.x := 0;
+     srcRect.y := 0;
+     srcRect.w := w;
+     dstRect.w := w;
+     srcRect.h := h;
+     dstRect.h := h;
+     dstRect.x := x;
+     dstRect.y := y;
+     p.x:=0;
+     p.y:=0;
+     SDL_RenderCopyEx(GoEngine.FRenderer,FTextureMap[aId],@srcRect,@dstRect,0.0,@p,Flip);
   end;
 
-    procedure TGoTextureManager.DrawFrame(aID: String; x, y, w, h: Integer;
-    CurrentRow, CurrentFrame: Integer; aRenderer: PSDL_Renderer; Flip: Integer);
+        procedure TGoTextureManager.DrawFrame(aID: String; x, y, w, h: Integer;
+      CurrentRow, CurrentFrame: Integer; Flip: Integer);
+    var srcRect, dstRect : TSDL_Rect;
+      p : TSDL_Point;
   begin
-
+     srcRect.x := w*CurrentFrame;
+     srcRect.y := h*CurrentRow;
+     srcRect.w := w;
+     dstRect.w := w;
+     srcRect.h := h;
+     dstRect.h := h;
+     dstRect.x := x;
+     dstRect.y := y;
+     p.x:=0;
+     p.y:=0;
+     SDL_RenderCopyEx(GoEngine.FRenderer,FTextureMap[aId],@srcRect,@dstRect,0.0,@p,Flip);
   end;
 
     destructor TGoTextureManager.Destroy;
@@ -138,6 +164,8 @@ var CountInstances : Byte;
           SDL_DestroyTexture(FTextureMap.Data[i]);
           FTextureMap.Delete(i);
       end;
+      FreeAndNil(FTextureMap);
+      inherited Destroy;
     end;
 
   { TGOEngine }
@@ -172,6 +200,10 @@ var CountInstances : Byte;
           FErrorInfo:=SDL_GetError;
           FError:=true;
           WriteLn(FErrorInfo);
+        end else begin
+          FTexturemanager:= TGoTextureManager.Create;
+          fr:=0;
+          fc:=0;
         end;
       //виділення пам'яті для структури обробки подій
       New(FEvent);
@@ -219,6 +251,7 @@ begin
   if Ffullscreen then SDL_SetWindowFullscreen(FWindow,SDL_WINDOW_FULLSCREEN)
      else SDL_SetWindowFullscreen(FWindow,0);
   SDL_UpdateWindowSurface(FWindow);
+  SDL_SetWindowTitle(FWindow,PChar(UTF8String(FCaption)));
 end;
 
 procedure TGOEngine.Sethardwareacceleration(Avalue: Boolean);
@@ -270,6 +303,8 @@ end;
    //зберігаємо налаштування в файл
    if not  SaveSettings then WriteLN('Не вдалось записати налаштування!');
    //прибрати за собою - в оберненому порядку створення
+
+   FreeAndNil(FTexturemanager);
    Dispose(FEvent);
    SDL_DestroyRenderer(FRenderer);
    SDL_DestroyWindow(FWindow);
@@ -278,7 +313,7 @@ end;
    inherited Destroy;
   end;
 
-        procedure TGOEngine.DoEvents;
+  procedure TGOEngine.DoEvents;
   begin
    if SDL_PollEvent(FEvent)=1 then begin
     case FEvent^.type_ of
@@ -305,6 +340,12 @@ end;
         procedure TGOEngine.GameLogic;
   begin
     //тут буде прораховуватись ігрова логіка
+   if fc=7 then begin
+    fc:=0;
+    Inc(fr);
+    if fr>9 then fr:=0;
+   end else inc(fc);
+   SDL_Delay(75);
   end;
 
         procedure TGOEngine.Draw;
@@ -313,6 +354,9 @@ end;
     SDL_SetRenderDrawColor(FRenderer,0,128,255,255);
     //очистити вікно
     SDL_RenderClear(FRenderer);
+
+    //temporary draw
+    Texturemanager.DrawFrame('Tux',0,0,32,32,fr,fc);
 
     //показати вікно на екран
     SDL_RenderPresent(FRenderer);

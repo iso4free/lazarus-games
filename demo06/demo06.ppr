@@ -14,6 +14,7 @@ begin
     GoEngine.Width:=640;
     GoEngine.Height:=480;
     GoEngine.Caption:='Демо 06';
+    GoEngine.Texturemanager.Load('assets'+DirectorySeparator+'tux.png','Tux');
     GoEngine.Run;
   end;
 end.
