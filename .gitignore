@@ -2,3 +2,6 @@ bin/*.*
 lib/*.*
 SDL2-for-Pascal/*.*
 SDL2-for-Pascal/
+*.compiled
+*.o
+*.ppu

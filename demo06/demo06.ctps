@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="12"/>
+    <BuildModes Active="Debug"/>
+    <Units>
+      <Unit>
+        <Filename Value="demo06.ppr"/>
+        <FRMtype Value="0"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <CursorPos X="28" Y="16"/>
+        <UsageCount Value="27"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="ugoengine.pas"/>
+        <FRMtype Value="0"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <CursorPos X="43" Y="108"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="/usr/local/codetyphon/fpcsrc/rtl/objpas/fgl.pp"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="283"/>
+        <CursorPos X="21" Y="292"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../SDL2-for-Pascal/units/sdlrenderer.inc"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="873"/>
+        <CursorPos X="166" Y="889"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="18">
+      <Position>
+        <Filename Value="demo06.ppr"/>
+        <Caret Line="10" Column="43"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="72" Column="33"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="42" Column="20" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="56" Column="18" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="226" TopLine="206"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="127" Column="21" TopLine="113"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="18" Column="100" TopLine="4"/>
+      </Position>
+      <Position>
+        <Filename Value="../SDL2-for-Pascal/units/sdlrenderer.inc"/>
+        <Caret Line="75" Column="42" TopLine="63"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="20" Column="9" TopLine="4"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="98" Column="35" TopLine="96"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="47" Column="93" TopLine="25"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="146" Column="22" TopLine="134"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="240" TopLine="227"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="239" Column="98" TopLine="226"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="78" Column="69" TopLine="53"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="24" Column="24" TopLine="9"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="117" Column="20" TopLine="97"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="24" Column="17" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="139" Column="41" TopLine="133"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
