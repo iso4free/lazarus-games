@@ -15,8 +15,7 @@
         <Filename Value="ugoengine.pas"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="63"/>
-        <CursorPos Y="75"/>
+        <CursorPos X="22" Y="8"/>
         <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
@@ -113,10 +112,6 @@
       </Position>
       <Position>
         <Filename Value="ugoengine.pas"/>
-        <Caret Line="168" Column="20" TopLine="226"/>
-      </Position>
-      <Position>
-        <Filename Value="ugoengine.pas"/>
         <Caret Line="33" Column="17" TopLine="13"/>
       </Position>
       <Position>
@@ -206,6 +201,10 @@
       <Position>
         <Filename Value="ugoengine.pas"/>
         <Caret Line="92" Column="41" TopLine="63"/>
+      </Position>
+      <Position>
+        <Filename Value="ugoengine.pas"/>
+        <Caret Line="75" TopLine="63"/>
       </Position>
     </JumpHistory>
     <RunParams>

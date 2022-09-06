@@ -15,6 +15,7 @@ begin
     GoEngine.Height:=480;
     GoEngine.Caption:='Демо 06';
     GoEngine.Texturemanager.Load('assets'+DirectorySeparator+'tux.png','Tux');
+    GoEngine.Texturemanager.Load('assets'+DirectorySeparator+'tuxearth.png','Tux earth');
     GoEngine.Run;
   end;
 end.

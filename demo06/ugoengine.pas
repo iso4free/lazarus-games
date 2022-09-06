@@ -357,7 +357,10 @@ end;
 
     //temporary draw
     Texturemanager.DrawFrame('Tux',0,0,32,32,fr,fc);
+    Texturemanager.DrawFrame('Tux',64,0,32,32,9-fr,7-fc);
 
+    Texturemanager.DrawFrame('Tux earth',0,64,32,32,fr,fc);
+    Texturemanager.DrawFrame('Tux earth',64,64,32,32,9-fr,7-fc);
     //показати вікно на екран
     SDL_RenderPresent(FRenderer);
   end;
