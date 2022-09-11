@@ -9,22 +9,21 @@ uses
 
 type
 
-  TGoTextureMap = specialize TFPGMap<String, PSDL_Texture>;
+  TGOTextureMap = specialize TFPGMap<String, PSDL_Texture>;
 
-  { TGoTextureManager }
+  { TGOTextureManager }
 
-  TGoTextureManager = class
-   private
-    FTextureMap : TGoTextureMap;
-    constructor Create;
-   public
-    function Load(aFileName : String; aID : String) : Boolean;
-    procedure Draw(aID : String; x,y,w,h : Integer; Flip : Integer = SDL_FLIP_NONE);
-    procedure DrawFrame(aID : String; x,y,w,h : Integer; CurrentRow, CurrentFrame : Integer; Flip : Integer = SDL_FLIP_NONE);
-    destructor Destroy; override;
+  TGOTextureManager = class
+  private
+   FTextureMap : TGoTextureMap;
+   constructor Create;
+
+  public
+    destructor Drestroy;// override;
+    function Load(aFilename : TFileName; aID : String) : Boolean; //додати зображення з файлу в карту текстур
+    procedure Draw(aID : String; x,y,w,h : Integer; Flip : Integer = SDL_FLIP_NONE); //намалювати зображення в потрібній позиції
+    procedure DrawFrame(aID : String; x,y,w,h,r,c : Integer; Flip : Integer = SDL_FLIP_NONE); //намалювати кадр зображення в потрібній позиції
   end;
-
-
 
   { TGOEngine }
 
@@ -32,7 +31,7 @@ type
   private
     FCaption: String;
     FHeight: Integer;
-    FTexturemanager: TGoTextureManager;
+    FTextureManager: TGOTextureManager;
     FWidth: Integer;
     FWindow : PSDL_Window;
     FRenderer : PSDL_Renderer;
@@ -48,7 +47,7 @@ type
     FFileName : TFileName; // ім'я файлу налаштувань
     FSection : String; //назва секції налаштувань фреймворка
 
-    fr,fc : Integer;
+    fr, fc : Integer;
 
     constructor Create(Afile: Tfilename = 'goengine.ini'; Asection: String = 'ENGINE');
     procedure SetCaption(AValue: String);
@@ -77,12 +76,8 @@ type
    property Active : Boolean read FActive default True;//чи вікно має фокус
    property HardwareAcceleration : Boolean read FHardwareAcceleration write SetHardwareAcceleration default True; //апаратне прикорення
 
-   //Texture manager
-   property Texturemanager : TGoTextureManager read FTexturemanager;
-
+   property TextureManager : TGOTextureManager read FTextureManager; //менеджер текстур
   end;
-
-
 
 var
   GoEngine : TGOEngine;
@@ -94,78 +89,67 @@ uses IniFiles;
 
 var CountInstances : Byte;
 
-  { TGoTextureManager }
+  { TGOTextureManager }
 
-    constructor TGoTextureManager.Create;
+    constructor TGOTextureManager.Create;
+  begin
+    inherited Create;
+    FTextureMap := TGOTextureMap.Create;
+  end;
+
+    destructor TGOTextureManager.Drestroy;
     begin
-      inherited Create;
-      FTextureMap:=TGoTextureMap.Create;
-    end;
-
-        function TGoTextureManager.Load(aFileName: String; aID: String): Boolean;
-    var TmpSurface : PSDL_Surface;
-        TmpTexture : PSDL_Texture;
-  begin
-     Result := False;
-     TmpSurface:=IMG_Load(PChar(aFileName));
-     if TmpSurface=nil then begin
-      WriteLN( SDL_GetError(),' Error loading '+aFileName);
-      Exit;
-     end;
-     TmpTexture:=SDL_CreateTextureFromSurface(GoEngine.FRenderer,TmpSurface);
-     SDL_FreeSurface(TmpSurface);
-     if TmpTexture<>nil then begin
-      FTextureMap[aID]:=TmpTexture;
-      Result:=True;
-     end;
-  end;
-
-        procedure TGoTextureManager.Draw(aID: String; x, y, w, h: Integer;
-      Flip: Integer);
-    var srcRect, dstRect : TSDL_Rect;
-        p : TSDL_Point;
-  begin
-     srcRect.x := 0;
-     srcRect.y := 0;
-     srcRect.w := w;
-     dstRect.w := w;
-     srcRect.h := h;
-     dstRect.h := h;
-     dstRect.x := x;
-     dstRect.y := y;
-     p.x:=0;
-     p.y:=0;
-     SDL_RenderCopyEx(GoEngine.FRenderer,FTextureMap[aId],@srcRect,@dstRect,0.0,@p,Flip);
-  end;
-
-        procedure TGoTextureManager.DrawFrame(aID: String; x, y, w, h: Integer;
-      CurrentRow, CurrentFrame: Integer; Flip: Integer);
-    var srcRect, dstRect : TSDL_Rect;
-      p : TSDL_Point;
-  begin
-     srcRect.x := w*CurrentFrame;
-     srcRect.y := h*CurrentRow;
-     srcRect.w := w;
-     dstRect.w := w;
-     srcRect.h := h;
-     dstRect.h := h;
-     dstRect.x := x;
-     dstRect.y := y;
-     p.x:=0;
-     p.y:=0;
-     SDL_RenderCopyEx(GoEngine.FRenderer,FTextureMap[aId],@srcRect,@dstRect,0.0,@p,Flip);
-  end;
-
-    destructor TGoTextureManager.Destroy;
-    var
-      i: Integer;
-    begin
-      for i:= FTextureMap.Count-1 downto 0 do begin
-          SDL_DestroyTexture(FTextureMap.Data[i]);
-          FTextureMap.Delete(i);
-      end;
       FreeAndNil(FTextureMap);
       inherited Destroy;
+    end;
+
+    function TGOTextureManager.Load(aFilename: TFileName; aID: String): Boolean;
+     var Tmpsurface : PSDL_Surface;
+         TmpTexture : PSDL_Texture;
+    begin
+      result := False;
+
+      Tmpsurface:=IMG_Load(PChar(aFilename));
+      if Tmpsurface=nil then begin
+       WriteLn(SDL_GetError,' Errtor loading '+aFilename);
+       Exit;
+      end;
+      TmpTexture:=SDL_CreateTextureFromSurface(GoEngine.FRenderer,Tmpsurface);
+      SDL_FreeSurface(Tmpsurface);
+      if TmpTexture<>nil then begin
+       FTextureMap[aID]:=TmpTexture;
+       result := True;
+      end;
+    end;
+
+    procedure TGOTextureManager.Draw(aID: String; x, y, w, h: Integer;
+      Flip: Integer);
+    var srcRect, dstRect : TSDL_Rect;
+    begin
+      srcRect.x := 0;
+      srcRect.y := 0;
+      srcRect.w := w;
+      srcRect.h := h;
+      dstRect.x := x;
+      dstRect.y := y;
+      dstRect.w := w;
+      dstRect.h := h;
+      SDL_RenderCopyEx(GoEngine.FRenderer,FTextureMap[aID],@srcRect,@dstRect,0,nil,Flip);
+    end;
+
+    procedure TGOTextureManager.DrawFrame(aID: String; x, y, w, h, r,
+      c: Integer; Flip: Integer);
+    var srcRect, dstRect : TSDL_Rect;
+    begin
+      srcRect.x := w*c;
+      srcRect.y := h*r;
+      srcRect.w := w;
+      srcRect.h := h;
+      dstRect.x := x;
+      dstRect.y := y;
+      dstRect.w := w;
+      dstRect.h := h;
+      SDL_RenderCopyEx(GoEngine.FRenderer,FTextureMap[aID],@srcRect,@dstRect,0,nil,Flip);
     end;
 
   { TGOEngine }
@@ -201,10 +185,10 @@ var CountInstances : Byte;
           FError:=true;
           WriteLn(FErrorInfo);
         end else begin
-          FTexturemanager:= TGoTextureManager.Create;
-          fr:=0;
-          fc:=0;
+          FTextureManager := TGOTextureManager.Create;
         end;
+       fr := 0;
+       fc := 0;
       //виділення пам'яті для структури обробки подій
       New(FEvent);
       //встановлення ознаки виконання циклу і його запуск
@@ -212,7 +196,6 @@ var CountInstances : Byte;
       end else begin
        FErrorInfo:=SDL_GetError;
        WriteLn(FErrorInfo);
-       Exit;
       end;
     end;
   end;
@@ -251,7 +234,6 @@ begin
   if Ffullscreen then SDL_SetWindowFullscreen(FWindow,SDL_WINDOW_FULLSCREEN)
      else SDL_SetWindowFullscreen(FWindow,0);
   SDL_UpdateWindowSurface(FWindow);
-  SDL_SetWindowTitle(FWindow,PChar(UTF8String(FCaption)));
 end;
 
 procedure TGOEngine.Sethardwareacceleration(Avalue: Boolean);
@@ -304,7 +286,7 @@ end;
    if not  SaveSettings then WriteLN('Не вдалось записати налаштування!');
    //прибрати за собою - в оберненому порядку створення
 
-   FreeAndNil(FTexturemanager);
+   FreeAndNil(FTextureManager);
    Dispose(FEvent);
    SDL_DestroyRenderer(FRenderer);
    SDL_DestroyWindow(FWindow);
@@ -340,11 +322,12 @@ end;
         procedure TGOEngine.GameLogic;
   begin
     //тут буде прораховуватись ігрова логіка
-   if fc=7 then begin
-    fc:=0;
+   if fc >=7 then begin
+    fc :=0;
     Inc(fr);
-    if fr>9 then fr:=0;
-   end else inc(fc);
+    if fr>=9 then fr:=0
+       else Inc(fr);
+   end else Inc(fc);
    SDL_Delay(75);
   end;
 
@@ -355,12 +338,12 @@ end;
     //очистити вікно
     SDL_RenderClear(FRenderer);
 
-    //temporary draw
-    Texturemanager.DrawFrame('Tux',0,0,32,32,fr,fc);
-    Texturemanager.DrawFrame('Tux',64,0,32,32,9-fr,7-fc);
+    //тимчасово - вивести зображення на екран
+    TextureManager.DrawFrame('Tux', 0, 0, 32, 32, fr, fc);
+    TextureManager.DrawFrame('Tux', 64, 0, 32, 32, 9-fr, 7-fc, SDL_FLIP_HORIZONTAL);
 
-    Texturemanager.DrawFrame('Tux earth',0,64,32,32,fr,fc);
-    Texturemanager.DrawFrame('Tux earth',64,64,32,32,9-fr,7-fc);
+    TextureManager.DrawFrame('Tux Fire', 0, 64, 32, 32, fr, fc);
+    TextureManager.DrawFrame('Tux Fire', 64, 64, 32, 32, 9-fr, 7-fc, SDL_FLIP_HORIZONTAL);
     //показати вікно на екран
     SDL_RenderPresent(FRenderer);
   end;
