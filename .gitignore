@@ -1,5 +1,5 @@
-bin/*.*
-lib/*.*
+bin/*
+lib/*
 lib/
 SDL2-for-Pascal/*.*
 SDL2-for-Pascal/

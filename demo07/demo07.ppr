@@ -1,0 +1,57 @@
+program demo07;
+
+{$mode objfpc}{$H+}{$M+}
+
+uses
+  {$IFDEF UNIX}
+  cthreads,
+  {$ENDIF}
+  Classes
+  { you can add units after this }, sysutils, ugoengine;
+
+type
+
+  { TPlayer }
+
+  TPlayer = class(TGOBaseObject)
+  private
+    FFrame: integer;
+    StartTime,
+    EndTime : Integer;
+  published
+    property Frame : integer read FFrame default 0;
+    procedure Update; override;
+  end;
+
+{ TPlayer }
+
+procedure TPlayer.Update;
+begin
+  //тут буде прораховуватись ігрова логіка
+ if FCol >=7 then begin
+  FCol :=0;
+  Inc(FRow);
+  if FRow>=9 then FRow:=0
+     else Inc(FRow);
+ end else Inc(FCol);
+end;
+
+
+var Player : TPlayer;
+    Enemy : TPlayer;
+
+begin
+  if GoEngine<>nil then begin
+    GoEngine.Caption:='демо 07';
+    GoEngine.Width:=640;
+    GoEngine.Height:=480;
+    GoEngine.TextureManager.Load('assets'+DirectorySeparator+'tux.png','Tux');
+    GoEngine.TextureManager.Load('assets'+DirectorySeparator+'tuxfire.png','Tux Fire');
+    Player:=TPlayer.Create(50,50,32,32,'Tux');
+    Enemy:=TPlayer.Create(150,150,32,32,'Tux Fire');
+    GoEngine.GameObjects.Add(@Player);
+    GoEngine.GameObjects.Add(@Enemy);
+    GoEngine.Run;
+    FreeAndNil(Player);
+  end;
+end.
