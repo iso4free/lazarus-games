@@ -21,6 +21,7 @@ type
   published
     property Frame : integer read FFrame default 0;
     procedure Update; override;
+    procedure Clear; override;
   end;
 
 { TPlayer }
@@ -36,6 +37,11 @@ begin
  end else Inc(FCol);
 end;
 
+procedure TPlayer.Clear;
+begin
+  inherited Clear;
+end;
+
 
 var Player : TPlayer;
     Enemy : TPlayer;
@@ -49,9 +55,8 @@ begin
     GoEngine.TextureManager.Load('assets'+DirectorySeparator+'tuxfire.png','Tux Fire');
     Player:=TPlayer.Create(50,50,32,32,'Tux');
     Enemy:=TPlayer.Create(150,150,32,32,'Tux Fire');
-    GoEngine.GameObjects.Add(@Player);
-    GoEngine.GameObjects.Add(@Enemy);
+    GoEngine.GameObjects.Add(Player);
+    GoEngine.GameObjects.Add(Enemy);
     GoEngine.Run;
-    FreeAndNil(Player);
   end;
 end.
