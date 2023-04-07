@@ -10,6 +10,12 @@ uses
 const
   GO_MAX_FPS = 120;
 
+  //константи для віддзеркалення зображень
+  GO_FLIP_NONE = SDL_FLIP_NONE;
+  GO_FLIP_H = SDL_FLIP_HORIZONTAL;
+  GO_FLIP_V = SDL_FLIP_VERTICAL;
+  GO_FLIP_D = SDL_FLIP_HORIZONTAL OR SDL_FLIP_VERTICAL;
+
 type
 
   { TSDLTextureWrapper }
@@ -37,7 +43,26 @@ type
     procedure DrawFrame(aID: String; x, y, w, h, r, c: Integer; Flip: Integer = SDL_FLIP_NONE); //намалювати кадр зображення в потрібній позиції
   end;
 
-  PGOBaseObject = ^TGOBaseObject;
+  { TGOObjLoader }
+
+  TGOObjLoader = class
+   protected
+    FX, FY: Integer;  //позиція об'єкта
+    FW, FH: Integer;  //розміри об'єкта
+    FCol, FRow: Integer; //стовбець і рядок фрагмента зображення
+    FFlip: Integer; //ознака віддзеркалення для малювання
+    FId: String;
+   public
+    constructor Create(x, y, Width, Height: Integer; Id: String);
+    property X : Integer read FX write FX default 0;
+    property Y : Integer read FY write FY default 0;
+    property Width : Integer read FW write FW default 0;
+    property Height : Integer read FH write FH default 0;
+    property Column : Integer read FCol write FCol default 1;
+    property Row : Integer read FRow write FRow default 1;
+    property Id : String read FId write FId;
+    property Flip : Integer read FFlip write FFlip default GO_FLIP_NONE;
+  end;
 
   { TGOBaseObject }
 
@@ -46,16 +71,16 @@ type
     FX, FY: Integer;  //позиція об'єкта
     FW, FH: Integer;  //розміри об'єкта
     FCol, FRow: Integer; //стовбець і рядок фрагмента зображення
+    FFlip: Integer; //ознака віддзеркалення для малювання
     FId: String;
   public
-    constructor Create(x, y, Width, Height: Integer; Id: String);
-    destructor Destroy; override;
+    constructor Create(const ObjLoader : TGOObjLoader);
     procedure Draw();
-    procedure Update(); virtual;
-    procedure Clear(); virtual;
+    procedure Update(); virtual; abstract;
+    procedure Clear(); virtual; abstract;
   end;
 
-  TGOObjectsVector = specialize TFPGObjectList<TGOBaseObject>;
+  TGOObjectsList = specialize TFPGObjectList<TGOBaseObject>;
 
   { TGOEngine }
 
@@ -67,7 +92,7 @@ type
 
     FHeight: Integer;
     FTextureManager: TGOTextureManager;
-    FGameObjects: TGOObjectsVector;
+    FGameObjects: TGOObjectsList;
     FWidth: Integer;
     FWindow: PSDL_Window;
     FRenderer: PSDL_Renderer;
@@ -113,7 +138,7 @@ type
     property FPSLimit: Integer read FFPSLimit write SetFPSLimit default 60; //обмеження частоти кадрів
 
     property TextureManager: TGOTextureManager read FTextureManager; //менеджер текстур
-    property GameObjects: TGOObjectsVector read FGameObjects;        //список об'єктів
+    property GameObjects: TGOObjectsList read FGameObjects;        //список об'єктів
 
   end;
 
@@ -127,6 +152,20 @@ uses IniFiles;
 
 var
   CountInstances: Byte;
+
+{ TGOObjLoader }
+
+constructor TGOObjLoader.Create(x, y, Width, Height: Integer; Id: String);
+begin
+  FX := x;
+  FY := y;
+  FW := Width;
+  FH := Height;
+  FId := Id;
+  FRow := 1;
+  FCol := 1;
+  FFlip := SDL_FLIP_NONE;
+end;
 
 { TSDLTextureWrapper }
 
@@ -143,34 +182,23 @@ end;
 
 { TGOBaseObject }
 
-constructor TGOBaseObject.Create(x, y, Width, Height: Integer; Id: String);
+constructor TGOBaseObject.Create(const ObjLoader: TGOObjLoader);
 begin
-  FX := x;
-  FY := y;
+ with ObjLoader do begin
+  FX := X;
+  FY := Y;
   FW := Width;
   FH := Height;
   FId := Id;
-  FRow := 1;
-  FCol := 1;
-end;
-
-destructor TGOBaseObject.Destroy;
-begin
-  inherited Destroy;
+  FRow := Row;
+  FCol := Column;
+  FFlip := Flip;
+ end;
 end;
 
 procedure TGOBaseObject.Draw;
 begin
-  GoEngine.TextureManager.DrawFrame(FId, Fx, Fy, Fw, Fh, FRow, FCol);
-end;
-
-procedure TGOBaseObject.Update;
-begin
-end;
-
-procedure TGOBaseObject.Clear;
-begin
-
+  GoEngine.TextureManager.DrawFrame(FId, Fx, Fy, Fw, Fh, FRow, FCol, FFlip);
 end;
 
 { TGOBaseObject }
@@ -259,8 +287,7 @@ begin
     FWindowFlags := SDL_WINDOW_SHOWN;
     if Ffullscreen then FWindowFlags := FWindowFlags or SDL_WINDOW_FULLSCREEN;
     //успішна ініціалізація - створюємо вікно
-    FWindow := SDL_CreateWindow('', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, FWidth,
-      FHeight, FWindowFlags);
+    FWindow := SDL_CreateWindow('', SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, FWidth, FHeight, FWindowFlags);
     //якщо вікно створене, створюємо візуалізатор
     if FWindow <> nil then
     begin
@@ -276,7 +303,7 @@ begin
       else
       begin
         FTextureManager := TGOTextureManager.Create;
-        FGameObjects := TGOObjectsVector.Create;
+        FGameObjects := TGOObjectsList.Create;
       end;
       //виділення пам'яті для структури обробки подій
       New(FEvent);
@@ -293,7 +320,6 @@ end;
 
 procedure TGOEngine.SetCaption(AValue: String);
 begin
-  //  if FCaption=AValue then Exit;
   FCaption := AValue;
   SDL_SetWindowTitle(FWindow, PChar(Utf8string(FCaption)));
 end;
@@ -425,27 +451,29 @@ end;
 
 procedure TGOEngine.Update;
 var
-  i: Integer;
+  gobj: TGOBaseObject;
 begin
-  for i := 0 to FGameObjects.Count - 1 do
+  //якщо список об'єктів порожній, виходимо з метода
+  if FGameObjects.Count = 0 then Exit;
+  for gobj in FGameObjects do
   begin
-    FGameObjects.Items[i].Update();
-    //SDL_Delay(100);
+    gobj.Update();
   end;
-
+  SDL_Delay(100);
 end;
 
 procedure TGOEngine.Draw;
 var
-  i: Integer;
+  gobj: TGOBaseObject;
 begin
   //встановимо колір вікна в голубий
   SDL_SetRenderDrawColor(FRenderer, 0, 128, 255, 255);
   //очистити вікно
   SDL_RenderClear(FRenderer);
 
-  //вивести потрібні об'єкти
-  for i := 0 to FGameObjects.Count - 1 do FGameObjects.Items[i].Draw();
+  //вивести потрібні об'єкти, якщо список не порожній
+  if FGameObjects.Count <> 0 then
+    for gobj in FGameObjects do gobj.Draw();
 
   //показати вікно на екран
   SDL_RenderPresent(FRenderer);
