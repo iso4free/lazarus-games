@@ -11,6 +11,17 @@ uses
 
 type
 
+  { TPlayerLoader }
+
+  TPlayerLoader = class (TGOObjLoader)
+  private
+    FDirectionX: ShortInt;
+    FDirectionY: ShortInt;
+  published
+   property DirectionX : ShortInt read FDirectionX write FDirectionX;
+   property DirectionY : ShortInt read FDirectionY write FDirectionY;
+  end;
+
   { TPlayer }
 
   TPlayer = class(TGOBaseObject)
@@ -18,30 +29,37 @@ type
     FFrame: integer;
     FDirectionX,
     FDirectionY: ShortInt; //-1 рухаємось вліво, +1 рухаємось вправо
-  constructor Create(x, y, Width, Height: Integer; Id: String);
+  public
+    constructor Create(const ObjLoader : TPlayerLoader);
+    procedure Clear; override;
+
   published
     property Frame : integer read FFrame default 0;
     procedure Update; override;
   end;
-var
-  i: Integer;
+
 
 { TPlayer }
 
-constructor TPlayer.Create(x, y, Width, Height: Integer; Id: String);
+constructor TPlayer.Create(const ObjLoader: TPlayerLoader);
 begin
-  FDirectionX:=5;
-  FDirectiony:=5;
-  inherited Create(x, y, Width, Height, Id);
+  FDirectionX:=ObjLoader.DirectionX;
+  FDirectiony:=ObjLoader.DirectionY;
+  inherited Create(ObjLoader);
+end;
+
+procedure TPlayer.Clear;
+begin
+  FId:='';
 end;
 
 procedure TPlayer.Update;
 begin
   //тут буде прораховуватись ігрова логіка
   //спочатку змінюємо координати
- if FX>(GoEngine.Width-FW) then FDirectionX:=-5
+ if (FX>(GoEngine.Width-FW)) or (FDirectionX=0) then FDirectionX:=-5
     else if FX <=0 then FDirectionX:=5;
- if FY>=(GoEngine.Height-FH) then FDirectionY:=-5
+ if (FY>=(GoEngine.Height-FH))  or (FDirectionY=0) then FDirectionY:=-5
     else if FY <=0 then FDirectionY:=5;
  FX:=FX+FDirectionX;
  FY:=FY+FDirectionY;
@@ -58,6 +76,10 @@ begin
  end else Inc(FCol);
 end;
 
+
+var
+  i: Integer;
+  aLoader : TPlayerLoader;
 begin
   Randomize;
   if GoEngine<>nil then begin
@@ -66,10 +88,18 @@ begin
     GoEngine.Height:=480;
     GoEngine.TextureManager.Load('assets'+DirectorySeparator+'tux.png','Tux');
     GoEngine.TextureManager.Load('assets'+DirectorySeparator+'tuxfire.png','Tux Fire');
-    for i :=0 to 4000 do begin
-      GoEngine.GameObjects.Add(TPlayer.Create(Random(GoEngine.Width),Random(GoEngine.Height),32,32,'Tux'));
-      GoEngine.GameObjects.Add(TPlayer.Create(Random(GoEngine.Width),Random(GoEngine.Height),32,32,'Tux Fire'));
+    aLoader:=TPlayerLoader.Create(0,0,32,32,'Tux');
+    for i :=0 to 2000 do begin
+      aLoader.X := Random(GoEngine.Width);
+      aLoader.Y := Random(GoEngine.Height);
+      aLoader.Id := 'Tux';
+      GoEngine.GameObjects.Add(TPlayer.Create(aLoader));
+      aLoader.X := Random(GoEngine.Width);
+      aLoader.Y := Random(GoEngine.Height);
+      aLoader.Id := 'Tux Fire';
+      GoEngine.GameObjects.Add(TPlayer.Create(aLoader));
     end;
     GoEngine.Run;
+    FreeAndNil(aLoader);
   end;
 end.

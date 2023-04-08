@@ -184,21 +184,20 @@ end;
 
 constructor TGOBaseObject.Create(const ObjLoader: TGOObjLoader);
 begin
- with ObjLoader do begin
-  FX := X;
-  FY := Y;
-  FW := Width;
-  FH := Height;
-  FId := Id;
-  FRow := Row;
-  FCol := Column;
-  FFlip := Flip;
- end;
+  FX := ObjLoader.X;
+  FY := ObjLoader.Y;
+  FW := ObjLoader.Width;
+  FH := ObjLoader.Height;
+  FId := ObjLoader.Id;
+  FRow := ObjLoader.Row;
+  FCol := ObjLoader.Column;
+  FFlip := ObjLoader.Flip;
 end;
 
 procedure TGOBaseObject.Draw;
 begin
-  GoEngine.TextureManager.DrawFrame(FId, Fx, Fy, Fw, Fh, FRow, FCol, FFlip);
+ if fID<>'' then
+ GoEngine.TextureManager.DrawFrame(FId, Fx, Fy, Fw, Fh, FRow, FCol, FFlip);
 end;
 
 { TGOBaseObject }
@@ -458,6 +457,7 @@ begin
   for gobj in FGameObjects do
   begin
     gobj.Update();
+    //if gobj.FId='' then FGameObjects.Remove(gobj);
   end;
   SDL_Delay(100);
 end;
