@@ -459,7 +459,7 @@ begin
     gobj.Update();
     //if gobj.FId='' then FGameObjects.Remove(gobj);
   end;
-  SDL_Delay(100);
+  //SDL_Delay(100);
 end;
 
 procedure TGOEngine.Draw;
