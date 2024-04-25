@@ -2,13 +2,15 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="12"/>
-    <BuildModes Active="Default"/>
+    <BuildModes Active="Haiku-x64"/>
     <Units>
       <Unit>
         <Filename Value="demo01.ppr"/>
         <FRMtype Value="0"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
         <TopLine Value="32"/>
         <CursorPos X="56" Y="49"/>
         <UsageCount Value="20"/>

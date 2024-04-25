@@ -126,7 +126,7 @@ begin
     GoEngine.TextureManager.Add(TSDLTextureWrapper.Create('assets'+DirectorySeparator+'tuxfire.png'),'Tux Fire');
     //створюємо текстури цифр
     for i:=0 to 9 do begin
-      GoEngine.TextureManager.Add(TSDLTextureWrapper.Create(IntToStr(i)),IntToStr(i));
+      GoEngine.TextureManager.Add(TSDLTextureWrapper.Create(IntToStr(i),'assets'+DirectorySeparator+'Hardpixel-nn51.otf',20),IntToStr(i));
       if GoEngine.Error then begin
        WriteLn('Error: ', GoEngine.ErrorInfo);
        Halt(-1);

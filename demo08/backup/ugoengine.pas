@@ -257,7 +257,7 @@ begin
     GoEngine.FErrorInfo:='SDL_TTF can''t render text!';
     Exit;
   end;
-  FTexture:=SDL_CreateTextureFromSurface(GoEngine.FRenderer,aSurface);
+  Texture:=SDL_CreateTextureFromSurface(GoEngine.FRenderer,aSurface);
   WriteLn('debug: text height:',aSurface^.h, ' text width:',aSurface^.w);
   SDL_FreeSurface(aSurface);
   TTF_CloseFont(aFont);
