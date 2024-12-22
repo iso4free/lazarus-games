@@ -17,7 +17,7 @@ function priv_lazbuild
             debian | ubuntu)
                 printf '\x1b[32mInstall Lazarus.\x1b[0m\n' 1>&2
                 sudo apt-get update
-                sudo apt-get install -y lazarus{-ide-qt5,} libxwiimote-dev
+                sudo apt-get install -y lazarus{-ide-qt5,} libsdl2{-image,}-dev
                 ;;
         esac
     fi
@@ -57,7 +57,7 @@ function priv_lazbuild
             grep --color='always' 'Linking' "${VAR[out]}"
         else
             printf '\x1b[31m\t[%s]\tbuild project\t%s\x1b[0m\n' "${?}" "${REPLY}"
-            grep --color='always' 'Error:' "${VAR[out]}"
+            grep --color='always' --extended-regexp '(Error|Fatal):' "${VAR[out]}"
             ((errors+=1))
         fi 1>&2
     done < <(find 'src' -type 'f' -name '*.lpi' | grep -v 'backup' | sort)
