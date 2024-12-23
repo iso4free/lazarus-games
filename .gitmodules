@@ -1,0 +1,3 @@
+[submodule "use/SDL2-for-Pascal"]
+	path = use/SDL2-for-Pascal
+	url = git@github.com:PascalGameDevelopment/SDL2-for-Pascal.git
